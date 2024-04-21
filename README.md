@@ -1,8 +1,6 @@
-# audiosphere-connect
-
 # AudioSphere Connect 🎧
 
-![AudioSphere Connect Logo](images/audiosphere-connect-logo.png)
+![AudioSphere Connect Logo](https://static1.dualshockersimages.com/wordpress/wp-content/uploads/2022/07/Just-Listen-to-This-Song-Tatsuki-Fujimoto-Confession-Last-Scene-scaled.jpg)
 
 AudioSphere Connect is a powerful Python application that allows you to connect and interact with the AudioSphere device, bringing a seamless audio experience to your fingertips. 🌟
 
