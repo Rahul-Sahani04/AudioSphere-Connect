@@ -19,7 +19,7 @@ if (!socketId) {
   localStorage.setItem("socketId", socketId);
 }
 
-const socket = socketIO.connect("http://localhost:8000", {
+const socket = socketIO.connect(process.env.REACT_APP_API_SOCKET_URL, {
   query: { socketId },
 });
 
