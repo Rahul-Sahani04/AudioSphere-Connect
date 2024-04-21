@@ -1,0 +1,19 @@
+{
+  "name": "audiosphere-connect",
+  "module": "index.js",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "progress-estimator": "^0.3.1",
+    "react-h5-audio-player": "^3.9.1",
+    "socket.io": "^4.7.5",
+    "youtube-dl": "^3.5.0",
+    "ytdl-core": "^4.11.5"
+  }
+}
