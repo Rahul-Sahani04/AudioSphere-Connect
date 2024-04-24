@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
 import InputField from "../Components/InputField";
+import AudioAnimation from "../Components/AudioAnimation";
 
 const ChatHome = ({ socket }) => {
   const navigate = useNavigate();
@@ -26,8 +27,8 @@ const ChatHome = ({ socket }) => {
   };
 
   const handleJoinRoom = () => {
-    socket.emit("joinRoom", roomName);
-    navigate("/chat");
+    let CustomRoomId = roomName.split(" ").join("-").toLocaleLowerCase();
+    navigate("/audiosphere?roomId=" + CustomRoomId);
   };
 
   useEffect(() => {
@@ -40,7 +41,10 @@ const ChatHome = ({ socket }) => {
 
   return (
     <form className="home__container text-white">
-      <h2 className="home__header text-xl">Sign in to Open Chat</h2>
+      <h2 className="home__header text-2xl font-extrabold relative">
+        Welcome to <span className="text-[#C147E9]">Audio</span> Sphere 
+      </h2>
+      <h2 className="home__header text-xl">Sign In to Continue</h2>
       <label htmlFor="username">Username</label>
       <InputField
         type="text"
@@ -53,7 +57,9 @@ const ChatHome = ({ socket }) => {
       />
       <br />
       <div className="room__actions">
-        <label htmlFor="roomName" className="p-4">Room Name</label>
+        <label htmlFor="roomName" className="p-4">
+          Room Name
+        </label>
         <InputField
           type="text"
           name="roomName"

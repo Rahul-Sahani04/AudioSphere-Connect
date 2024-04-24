@@ -31,12 +31,18 @@ function AudioSphere({ socket }) {
         NewVideoId = videoId;
         setVideoId(videoId);
       }
+      console.log("Fteching Data: ", NewVideoId);
 
       const response = await fetch(
         process.env.REACT_APP_API_URL + `/video/${NewVideoId}`
       );
       const data = await response.json();
       console.log(data);
+      if (data.error) {
+        setData("");
+        console.error("Network Issues");
+        return;
+      }
       setData(data);
     } catch (error) {
       console.error("Failed to fetch video information:", error);
@@ -103,7 +109,6 @@ function AudioSphere({ socket }) {
   };
 
   useEffect(() => {
-
     const updateVideoPlaybackStatus = (status) => {
       socket.emit("updateVideoPlaybackStatus", status, CustomRoomId);
       // socket.emit("videoPlaybackStatus", status);
@@ -112,17 +117,21 @@ function AudioSphere({ socket }) {
     if (videoRef.current && videoRef.current.audio) {
       // Emit update video playback status event to the server
       console.log("Check Host: ", host);
-      if (host) {
+      if (host && data) {
         console.log(videoRef.current.currentTime);
         const interval = setInterval(() => {
+          const AudioData = data || {}; // Initialize AudioData with an empty object if data is null
+          console.log("Audio Data: ", AudioData, data);
           console.log("Updating Playback Status: ", {
             currentTime: videoRef.current.audio.current.currentTime,
             volume: videoRef.current.audio.current.volume,
+            data: AudioData,
           });
           updateVideoPlaybackStatus({
             currentTime: videoRef.current.audio.current.currentTime,
             paused: videoRef.current.audio.current.paused,
             volume: videoRef.current.audio.current.volume,
+            data: AudioData,
           });
         }, 5000); // Interval set to 5 seconds
 
@@ -130,10 +139,11 @@ function AudioSphere({ socket }) {
         return () => clearInterval(interval);
       }
 
-  
-
-
       socket.on("videoPlaybackStatus", (status) => {
+        if (!data) {
+          setData(status.data);
+        }
+
         // Handle the received video playback status
         // Update the video playback status in the Plyr player
         videoRef.current.audio.current.currentTime = status.currentTime;
@@ -145,10 +155,10 @@ function AudioSphere({ socket }) {
         }
       });
     }
-  }, [host]);
+  }, [host, data]);
 
   return (
-    <div className="App">
+    <div className="App relative bg-black h-screen w-screen text-white">
       <div id="YoutubeContainer">
         <input
           type="text"
@@ -158,14 +168,34 @@ function AudioSphere({ socket }) {
           placeholder="Enter video ID"
         />
         <button onClick={() => sendVideoId(videoId)}>Get Audio</button>
-        <button onClick={() => console.log(videoRef.current.audio.current.currentTime)}>Get Time</button>
+        <button
+          onClick={() =>
+            console.log(videoRef.current.audio.current.currentTime)
+          }
+        >
+          Get Time
+        </button>
       </div>
-      <AudioPlayer
-        autoPlay
-        src={data ? data[0].src : ""}
-        ref={videoRef}
-        // other props here
-      />
+      <div className="audioPlayerContainer fixed bottom-0 w-full flex flex-col justify-center border-solid border-2 border-white">
+        <div
+          className="fixed bottom-32 left-10 border-stone-200 border-2 border-solid  w-32 h-32 object-contain bg-no-repeat bg-center"
+          id="songThumbnail"
+          style={{
+            backgroundImage: `url(${
+              data ? data.thumbnails.pop().url : "https://placehold.co/200"
+            })`,
+          }}
+        ></div>
+        <h2 className="text-2xl text-pretty px-72 py-4 ">
+          Title: {data ? data.title : "Song Name"}
+        </h2>
+        <AudioPlayer
+          autoPlay
+          src={data ? data.src : ""}
+          ref={videoRef}
+          // other props here
+        />
+      </div>
       {/* Render the AudioPlayer component */}
     </div>
   );

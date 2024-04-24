@@ -144,19 +144,23 @@ function getUserRoom(socketId) {
 
 app.get('/api/video/:videoID', async (req, res) => {
     const videoID = req.params.videoID;
+    console.log("Sending Video Data.....")
 
     try {
         const info = await ytdl.getInfo(videoID);
         const audioFormats = ytdl.filterFormats(info.formats, 'audioonly');
 
-        const formattedFormats = audioFormats.map((format, index) => ({
-            index,
-            mimeType: format.mimeType,
-            itag: format.itag,
-            quality: format.quality,
-            audioQuality: format.audioQuality,
-            src: format.url,
-        }));
+        const formattedFormats = {
+            title: info.videoDetails.title,
+            mimeType: audioFormats[0].mimeType,
+            itag: audioFormats[0].itag,
+            quality: audioFormats[0].quality,
+            audioQuality: audioFormats[0].audioQuality,
+            src: audioFormats[0].url,
+            thumbnails: info.videoDetails.thumbnail.thumbnails
+        };
+
+        console.log("Formatted: ", formattedFormats)
 
         res.json(formattedFormats);
     } catch (error) {

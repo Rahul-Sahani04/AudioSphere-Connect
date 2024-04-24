@@ -9,7 +9,7 @@ const InputField = ({ name, value, onChangeFunc, id, minLength, type }) => {
       onChange={onChangeFunc}
       id={id}
       minLength={minLength}
-      className="input"
+      className={`input ${value ? "focused" : ""}`}
       placeholder="Type your text"
     />
   );

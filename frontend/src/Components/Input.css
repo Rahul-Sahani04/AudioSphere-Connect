@@ -14,14 +14,20 @@
     max-width: 190px;
     font-weight: bold;
     font-family: 'Courier New', Courier, monospace;
-   }
-   
-   .input:hover {
+}
+
+.input:hover {
     border-top-width: 0.2em;
     background-color: #f1e8e8;
-   }
-   
-   .input:focus {
+}
+
+.input:focus {
     border-top-width: 0.2em;
     background-color: #f1e8e8;
-   }
+}
+
+.focused {
+    border-top-width: 0.2em;
+    background-color: #f1e8e8;
+
+}
